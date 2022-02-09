@@ -1,0 +1,21 @@
+body {
+    border-radius: 5px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.row > * {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.col-12 {
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+}

@@ -1,0 +1,24 @@
+body {
+    --wtp-screen-width: 100%;
+    --wtp-screen-height: 100%;
+}
+
+.cover, .playground {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: var(--wtp-screen-width);
+    height: var(--wtp-screen-height);
+    z-index: 1000000;
+}
+
+.crop {
+    z-index: 1000001;
+    position: absolute;
+    box-shadow: 0 0 0 9999px rgba(180, 210, 255, 0.75);
+}
+
+.playground {
+    z-index: 1000007;
+    cursor: crosshair;
+}
