@@ -1,6 +1,6 @@
 {
-  "name": "WebpageToPDF",
-  "description": "Webpage To PDF Converter",
+  "name": "Webpage To PDF",
+  "description": "Webpage To PDF Converter with crop functionality",
   "version": "1.0.0",
   "manifest_version": 2,
   "icons": {
