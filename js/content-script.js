@@ -4,26 +4,42 @@
 var initiated = false;
 var drag = false;
 var x = 0, y = 0;
+var width = 1024, height = 1024;
 var cover, crop, playground;
 chrome.runtime.onMessage.addListener(() => {
   const body = document.body;
   const html = document.documentElement;
 
-  const cleanUp = () => {
+  const onResize = () => {
+    width = body.clientWidth;
+    height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    body.style.setProperty('--wtp-screen-width', `${width}px`);
+    body.style.setProperty('--wtp-screen-height', `${height}px`);
+  };
+
+  const clear = () => {
     body.removeChild(playground);
     body.removeChild(crop);
     body.removeChild(cover);
-    initiated = false;
-    drag = false;
   };
 
-  if (initiated) return cleanUp();
+  const reset = () => {
+    body.style.removeProperty('--wtp-screen-width');
+    body.style.removeProperty('--wtp-screen-height');
+    initiated = false;
+    drag = false;
+    window.removeEventListener('resize', onResize);
+  }
+
+  if (initiated) {
+    clear();
+    reset();
+    return;
+  }
   initiated = true;
 
-  const width = body.clientWidth;
-  const height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-  body.style.setProperty('--wtp-screen-width', `${width}px`);
-  body.style.setProperty('--wtp-screen-height', `${height}px`);
+  onResize();
+  window.addEventListener('resize', onResize);
   cover = document.createElement('div');
   cover.classList.add('cover');
   body.prepend(cover);
@@ -72,7 +88,7 @@ chrome.runtime.onMessage.addListener(() => {
     const { l, t, w, h } = setCrop(evt.offsetX, evt.offsetY);
     if (w <= 1 || h <= 1) return;
 
-    cleanUp();
+    clear();
 
     const div = document.createElement('div');
     div.style.position = 'relative';
@@ -89,8 +105,6 @@ chrome.runtime.onMessage.addListener(() => {
     body.replaceChildren(div);
     window.print();
     body.replaceChildren(...iframe.childNodes);
-    body.style.removeProperty('--wtp-screen-width');
-    body.style.removeProperty('--wtp-screen-height');
-    initiated = false;
+    reset();
   };
 });
